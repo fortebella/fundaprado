@@ -1,0 +1,740 @@
+/public
+  /fundaprado
+    logo.png
+    slide-1.jpg
+    slide-2.jpg
+    slide-3.jpg
+
+/pages
+  index.js
+
+/styles
+  globals.css
+
+import Head from "next/head";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+
+const COLORS = {
+  primary: "#134729",
+  secondary: "#9aca3a",
+  secondary2: "#53b145",
+  base: "#fafdfa",
+};
+
+export default function Home() {
+  // ✅ Reemplaza estas imágenes por las tuyas (en /public/fundaprado/)
+  const slides = useMemo(
+    () => [
+      {
+        src: "/fundaprado/slide-1.jpg",
+        alt: "Gestión ambiental y reciclaje",
+        caption: "Gestión ambiental responsable",
+      },
+      {
+        src: "/fundaprado/slide-2.jpg",
+        alt: "Alianzas con empresas e instituciones",
+        caption: "Alianzas estratégicas",
+      },
+      {
+        src: "/fundaprado/slide-3.jpg",
+        alt: "Trazabilidad de residuos aprovechables",
+        caption: "Trazabilidad garantizada",
+      },
+    ],
+    []
+  );
+
+  // ✅ Reemplaza estos links por tus Reels/posts ya publicados
+  const instagramVideos = useMemo(
+    () => [
+      {
+        title: "Reel: Jornada de recolección",
+        url: "https://www.instagram.com/reel/XXXXXXXXXXX/",
+      },
+      {
+        title: "Reel: Clasificación y trazabilidad",
+        url: "https://www.instagram.com/reel/YYYYYYYYYYY/",
+      },
+      {
+        title: "Post: Alianzas con instituciones",
+        url: "https://www.instagram.com/p/ZZZZZZZZZZZ/",
+      },
+    ],
+    []
+  );
+
+  const [active, setActive] = useState(0);
+  const total = slides.length;
+
+  const goTo = (i) => setActive((i + total) % total);
+  const next = () => goTo(active + 1);
+  const prev = () => goTo(active - 1);
+
+  // Autoplay (pausa si el usuario cambia de tab)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        setActive((a) => (a + 1) % total);
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [total]);
+
+  const year = new Date().getFullYear();
+
+  return (
+    <>
+      <Head>
+        <title>FUNDAPRADO | Gestión ambiental y trazabilidad</title>
+        <meta
+          name="description"
+          content="FUNDAPRADO es una fundación sin ánimo de lucro dedicada a la gestión ambiental responsable de residuos aprovechables, articulando alianzas estratégicas y garantizando trazabilidad."
+        />
+        <meta name="theme-color" content={COLORS.primary} />
+      </Head>
+
+      <div className="page">
+        {/* HEADER */}
+        <header className="header">
+          <div className="container headerInner">
+            <div className="brand">
+              <div className="logoWrap">
+                {/* Coloca tu logo en /public/fundaprado/logo.png */}
+                <Image
+                  src="/fundaprado/logo.png"
+                  alt="Logo Fundaprado"
+                  width={140}
+                  height={48}
+                  priority
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+              <div className="brandText">
+                <div className="brandName">FUNDAPRADO</div>
+                <div className="brandTag">Gestión ambiental • Reciclaje • Trazabilidad</div>
+              </div>
+            </div>
+
+            <nav className="nav">
+              <a href="#inicio">Inicio</a>
+              <a href="#impacto">Impacto</a>
+              <a href="#videos">Videos</a>
+              <a className="btn" href="#contacto">
+                Contacto
+              </a>
+            </nav>
+          </div>
+        </header>
+
+        {/* HERO */}
+        <main id="inicio" className="hero">
+          <div className="container heroGrid">
+            <section className="heroCopy">
+              <h1>Gestión ambiental responsable con trazabilidad real</h1>
+              <p>
+                <strong>FUNDAPRADO</strong> es una fundación sin ánimo de lucro dedicada a la gestión
+                ambiental responsable de residuos aprovechables, a través de la articulación de
+                alianzas estratégicas con empresas, colegios e instituciones.
+              </p>
+              <p>
+                Actúa como entidad intermediaria, acompañando los procesos de recolección y
+                garantizando la trazabilidad del material mediante gestores ambientales debidamente
+                autorizados, promoviendo prácticas sostenibles y el cumplimiento de buenas prácticas
+                ambientales.
+              </p>
+
+              <div className="ctaRow">
+                <a className="btnPrimary" href="#contacto">
+                  Vincularse / Aliarse
+                </a>
+                <a className="btnGhost" href="#videos">
+                  Ver videos (Instagram)
+                </a>
+              </div>
+
+              <div className="chips" aria-label="pilares">
+                <span♻️ Residuos aprovechables</span>
+                <span>🤝 Alianzas</span>
+                <span>📍 Trazabilidad</span>
+                <span>✅ Gestores autorizados</span>
+              </div>
+            </section>
+
+            {/* CAROUSEL */}
+            <section className="card">
+              <div className="carousel" aria-label="Carrusel Fundaprado">
+                <div className="carouselViewport">
+                  <div
+                    className="carouselTrack"
+                    style={{ transform: `translateX(-${active * 100}%)` }}
+                  >
+                    {slides.map((s, idx) => (
+                      <div className="slide" key={idx}>
+                        <div className="slideImg">
+                          <Image
+                            src={s.src}
+                            alt={s.alt}
+                            fill
+                            sizes="(max-width: 900px) 92vw, 520px"
+                            style={{ objectFit: "cover" }}
+                            priority={idx === 0}
+                          />
+                        </div>
+                        <div className="slideCaption">{s.caption}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <button className="navBtn left" onClick={prev} aria-label="Anterior">
+                  ‹
+                </button>
+                <button className="navBtn right" onClick={next} aria-label="Siguiente">
+                  ›
+                </button>
+
+                <div className="dots" role="tablist" aria-label="Indicadores">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      className={`dot ${i === active ? "active" : ""}`}
+                      onClick={() => goTo(i)}
+                      aria-label={`Ir a slide ${i + 1}`}
+                      aria-current={i === active ? "true" : "false"}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div id="impacto" className="impact">
+                <h2>Transparencia y buenas prácticas</h2>
+                <ul>
+                  <li>Intermediación responsable con aliados estratégicos.</li>
+                  <li>Trazabilidad del material con gestores ambientales autorizados.</li>
+                  <li>Enfoque en sostenibilidad y cumplimiento de buenas prácticas ambientales.</li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </main>
+
+        {/* VIDEOS */}
+        <section id="videos" className="videos">
+          <div className="container">
+            <div className="sectionHead">
+              <h2>Videos publicados (Instagram)</h2>
+              <p>Acceso rápido a Reels y publicaciones donde mostramos jornadas, procesos y resultados.</p>
+            </div>
+
+            <div className="videoGrid">
+              {instagramVideos.map((v, idx) => (
+                <a
+                  key={idx}
+                  className="videoCard"
+                  href={v.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="videoIcon">▶</div>
+                  <div className="videoText">
+                    <div className="videoTitle">{v.title}</div>
+                    <div className="videoLink">Abrir en Instagram</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACTO */}
+        <section id="contacto" className="contact">
+          <div className="container contactBox">
+            <div>
+              <h2>¿Quieres articular una alianza con FUNDAPRADO?</h2>
+              <p>
+                Déjanos tus datos y te contactamos. (Aquí puedes integrar un formulario de HubSpot si
+                ya lo tienes creado).
+              </p>
+            </div>
+
+            {/* Opción simple (puedes reemplazar por HubSpot form embed) */}
+            <form className="form" onSubmit={(e) => e.preventDefault()}>
+              <input placeholder="Nombre / Empresa" aria-label="Nombre / Empresa" />
+              <input placeholder="Correo" aria-label="Correo" type="email" />
+              <input placeholder="Teléfono" aria-label="Teléfono" />
+              <button className="btnPrimary" type="submit">
+                Enviar
+              </button>
+              <small>*Este botón es demo. Si quieres, te dejo el embed exacto de HubSpot.</small>
+            </form>
+          </div>
+        </section>
+
+        {/* FOOTER */}
+        <footer className="footer">
+          <div className="container footerInner">
+            <div className="footerBrand">
+              <span className="footerDot" /> FUNDAPRADO © {year}
+            </div>
+            <div className="footerLinks">
+              <a href="#inicio">Inicio</a>
+              <a href="#videos">Videos</a>
+              <a href="#contacto">Contacto</a>
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      {/* STYLES */}
+      <style jsx>{`
+        .page {
+          min-height: 100vh;
+          background: ${COLORS.base};
+          color: ${COLORS.primary};
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        }
+
+        .container {
+          width: min(1120px, calc(100% - 40px));
+          margin: 0 auto;
+        }
+
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 50;
+          background: rgba(250, 253, 250, 0.92);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(19, 71, 41, 0.12);
+        }
+
+        .headerInner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 0;
+          gap: 16px;
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          min-width: 240px;
+        }
+
+        .logoWrap {
+          width: 150px;
+          height: 52px;
+          display: grid;
+          place-items: center;
+        }
+
+        .brandName {
+          font-weight: 900;
+          letter-spacing: 0.5px;
+        }
+
+        .brandTag {
+          font-size: 12px;
+          opacity: 0.85;
+        }
+
+        .nav {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+
+        .nav a {
+          text-decoration: none;
+          color: ${COLORS.primary};
+          font-weight: 600;
+          padding: 8px 10px;
+          border-radius: 10px;
+        }
+
+        .nav a:hover {
+          background: rgba(154, 202, 58, 0.18);
+        }
+
+        .btn {
+          border: 1px solid rgba(19, 71, 41, 0.22);
+        }
+
+        .hero {
+          padding: 34px 0 14px;
+        }
+
+        .heroGrid {
+          display: grid;
+          grid-template-columns: 1.1fr 0.9fr;
+          gap: 24px;
+          align-items: start;
+        }
+
+        .heroCopy h1 {
+          font-size: clamp(28px, 3.2vw, 44px);
+          line-height: 1.05;
+          margin: 0 0 12px;
+        }
+
+        .heroCopy p {
+          margin: 0 0 12px;
+          color: rgba(19, 71, 41, 0.92);
+          font-size: 16px;
+          line-height: 1.55;
+        }
+
+        .ctaRow {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          margin-top: 14px;
+        }
+
+        .btnPrimary {
+          background: ${COLORS.primary};
+          color: ${COLORS.base};
+          border: 1px solid ${COLORS.primary};
+          padding: 12px 14px;
+          border-radius: 14px;
+          text-decoration: none;
+          font-weight: 800;
+        }
+
+        .btnPrimary:hover {
+          filter: brightness(1.05);
+        }
+
+        .btnGhost {
+          background: transparent;
+          color: ${COLORS.primary};
+          border: 1px solid rgba(19, 71, 41, 0.28);
+          padding: 12px 14px;
+          border-radius: 14px;
+          text-decoration: none;
+          font-weight: 800;
+        }
+
+        .btnGhost:hover {
+          background: rgba(83, 177, 69, 0.12);
+        }
+
+        .chips {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 16px;
+        }
+
+        .chips span {
+          background: rgba(154, 202, 58, 0.18);
+          border: 1px solid rgba(83, 177, 69, 0.22);
+          color: ${COLORS.primary};
+          font-weight: 700;
+          padding: 8px 10px;
+          border-radius: 999px;
+          font-size: 13px;
+        }
+
+        .card {
+          background: white;
+          border: 1px solid rgba(19, 71, 41, 0.12);
+          border-radius: 22px;
+          padding: 14px;
+          box-shadow: 0 10px 24px rgba(19, 71, 41, 0.08);
+        }
+
+        /* Carousel */
+        .carousel {
+          position: relative;
+        }
+
+        .carouselViewport {
+          overflow: hidden;
+          border-radius: 18px;
+          border: 1px solid rgba(19, 71, 41, 0.12);
+        }
+
+        .carouselTrack {
+          display: flex;
+          transition: transform 380ms ease;
+          width: 100%;
+        }
+
+        .slide {
+          min-width: 100%;
+          position: relative;
+        }
+
+        .slideImg {
+          position: relative;
+          width: 100%;
+          height: 320px;
+          background: rgba(154, 202, 58, 0.08);
+        }
+
+        .slideCaption {
+          padding: 10px 12px;
+          font-weight: 900;
+          color: ${COLORS.primary};
+          background: ${COLORS.base};
+        }
+
+        .navBtn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-55%);
+          width: 44px;
+          height: 44px;
+          border-radius: 999px;
+          border: 1px solid rgba(19, 71, 41, 0.18);
+          background: rgba(250, 253, 250, 0.92);
+          font-size: 28px;
+          font-weight: 900;
+          color: ${COLORS.primary};
+          cursor: pointer;
+        }
+
+        .navBtn:hover {
+          background: rgba(154, 202, 58, 0.18);
+        }
+
+        .navBtn.left {
+          left: 10px;
+        }
+        .navBtn.right {
+          right: 10px;
+        }
+
+        .dots {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          padding: 12px 0 0;
+        }
+
+        .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
+          border: 1px solid rgba(19, 71, 41, 0.28);
+          background: transparent;
+          cursor: pointer;
+        }
+
+        .dot.active {
+          background: ${COLORS.secondary};
+          border-color: ${COLORS.secondary};
+        }
+
+        .impact {
+          margin-top: 14px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(19, 71, 41, 0.12);
+        }
+
+        .impact h2 {
+          margin: 0 0 8px;
+          font-size: 18px;
+        }
+
+        .impact ul {
+          margin: 0;
+          padding-left: 18px;
+          color: rgba(19, 71, 41, 0.92);
+          line-height: 1.6;
+          font-weight: 600;
+        }
+
+        /* Videos */
+        .videos {
+          padding: 34px 0;
+        }
+
+        .sectionHead h2 {
+          margin: 0 0 6px;
+          font-size: 28px;
+        }
+
+        .sectionHead p {
+          margin: 0 0 14px;
+          color: rgba(19, 71, 41, 0.85);
+          font-weight: 600;
+        }
+
+        .videoGrid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+        }
+
+        .videoCard {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          padding: 14px;
+          background: white;
+          border: 1px solid rgba(19, 71, 41, 0.12);
+          border-radius: 18px;
+          text-decoration: none;
+          box-shadow: 0 10px 22px rgba(19, 71, 41, 0.06);
+        }
+
+        .videoCard:hover {
+          border-color: rgba(83, 177, 69, 0.45);
+          transform: translateY(-1px);
+          transition: 160ms ease;
+        }
+
+        .videoIcon {
+          width: 42px;
+          height: 42px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          background: rgba(83, 177, 69, 0.14);
+          border: 1px solid rgba(83, 177, 69, 0.22);
+          font-weight: 900;
+        }
+
+        .videoTitle {
+          font-weight: 900;
+          color: ${COLORS.primary};
+        }
+
+        .videoLink {
+          font-size: 12px;
+          font-weight: 800;
+          color: rgba(19, 71, 41, 0.75);
+          margin-top: 2px;
+        }
+
+        /* Contact */
+        .contact {
+          padding: 10px 0 40px;
+        }
+
+        .contactBox {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 18px;
+          background: white;
+          border: 1px solid rgba(19, 71, 41, 0.12);
+          border-radius: 22px;
+          padding: 18px;
+          box-shadow: 0 10px 22px rgba(19, 71, 41, 0.06);
+        }
+
+        .contactBox h2 {
+          margin: 0 0 8px;
+        }
+
+        .contactBox p {
+          margin: 0;
+          color: rgba(19, 71, 41, 0.85);
+          font-weight: 600;
+          line-height: 1.6;
+        }
+
+        .form {
+          display: grid;
+          gap: 10px;
+        }
+
+        .form input {
+          border: 1px solid rgba(19, 71, 41, 0.18);
+          border-radius: 14px;
+          padding: 12px 12px;
+          outline: none;
+          font-weight: 650;
+          background: ${COLORS.base};
+          color: ${COLORS.primary};
+        }
+
+        .form input:focus {
+          border-color: rgba(154, 202, 58, 0.8);
+          box-shadow: 0 0 0 4px rgba(154, 202, 58, 0.18);
+        }
+
+        .form small {
+          color: rgba(19, 71, 41, 0.7);
+          font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+          padding: 18px 0;
+          border-top: 1px solid rgba(19, 71, 41, 0.12);
+          background: rgba(250, 253, 250, 0.9);
+        }
+
+        .footerInner {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .footerBrand {
+          font-weight: 900;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .footerDot {
+          width: 10px;
+          height: 10px;
+          border-radius: 999px;
+          background: ${COLORS.secondary2};
+          display: inline-block;
+        }
+
+        .footerLinks {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
+        .footerLinks a {
+          color: ${COLORS.primary};
+          text-decoration: none;
+          font-weight: 800;
+          opacity: 0.85;
+        }
+
+        .footerLinks a:hover {
+          opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+          .heroGrid {
+            grid-template-columns: 1fr;
+          }
+          .videoGrid {
+            grid-template-columns: 1fr;
+          }
+          .contactBox {
+            grid-template-columns: 1fr;
+          }
+          .nav {
+            gap: 8px;
+          }
+          .logoWrap {
+            width: 120px;
+          }
+          .slideImg {
+            height: 260px;
+          }
+        }
+      `}</style>
+    </>
+  );
+}
