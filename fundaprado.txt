@@ -11,7 +11,6 @@ const COLORS = {
 };
 
 export default function Home() {
-  // ✅ Reemplaza estas imágenes por las tuyas (en /public/fundaprado/)
   const slides = useMemo(
     () => [
       {
@@ -33,7 +32,6 @@ export default function Home() {
     []
   );
 
-  // ✅ Reemplaza estos links por tus Reels/posts ya publicados
   const instagramVideos = useMemo(
     () => [
       {
@@ -726,4 +724,5 @@ export default function Home() {
     </>
   );
 }
+
 
