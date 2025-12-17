@@ -1,15 +1,3 @@
-/public
-  /fundaprado
-    logo.png
-    slide-1.jpg
-    slide-2.jpg
-    slide-3.jpg
-
-/pages
-  index.js
-
-/styles
-  globals.css
 
 import Head from "next/head";
 import Image from "next/image";
@@ -738,3 +726,4 @@ export default function Home() {
     </>
   );
 }
+
